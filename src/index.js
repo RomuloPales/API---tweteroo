@@ -5,9 +5,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const users =[]
-
-const tweet = []
+const users =[];
+const tweets = [];
 
 app.post("/sign-up", (req,res) => {
     const { username, avatar } = req.body;
@@ -15,7 +14,6 @@ app.post("/sign-up", (req,res) => {
         res.status(400).send({ error: "Todos os campos são obrigatórios" });
         return;
     }
-
     const userExist = users.find((user) => user.username === username)
     if (userExist) {
         res.status(409).send({ error: "Usuário já existe." });
@@ -24,6 +22,17 @@ app.post("/sign-up", (req,res) => {
     users.push({ username, avatar });
     res.status(201).send({ message: "OK" });
 });
+
+app.post("/tweets" ,(req,res) => {
+    const { username , tweet } = req.body
+    const userExists = users.find((user) => user.username === username)
+    if(!userExists){
+            res.status(401).send({ message: "UNAUTHORIZED" });
+            return;
+    }
+    tweets.push({username, tweet})
+    res.status(201).send({ message: "OK" });
+})
 
 
 
